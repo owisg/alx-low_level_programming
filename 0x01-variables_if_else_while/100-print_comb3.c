@@ -5,20 +5,24 @@
  */
 int main(void)
 {
-int num1, num2;
-for (num1 = 0; num1 <= 9; num1++)
+int ones, tens;
+for (tens = '0'; tens <= '9'; tens++)
 {
-for (num2 = num1 + 1; num2 <= 9; num2++)
+for (ones = '0'; ones <= '9'; ones++)
 {
-if (num1 < num2)
+if (!((ones == tens) || (tens > ones)))
 {
-putchar(num1 + '0');
-putchar(num2 + '0');
+putchar(tens);
+putchar(ones);
+if (!(ones == '9' && tens == '8'))
+{
 putchar(',');
 putchar(' ');
+}
 }
 }
 }
 putchar('\n');
 return (0);
 }
+
