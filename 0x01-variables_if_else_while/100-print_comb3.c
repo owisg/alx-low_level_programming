@@ -1,5 +1,8 @@
 #include <stdio.h>
-
+/**
+ * main - Entr point
+ * Return: Always 0 (success)
+ */
 int main(void)
 {
 int num1, num2;
