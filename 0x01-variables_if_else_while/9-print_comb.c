@@ -5,17 +5,14 @@
  */
 int main(void)
 {
-int num1, num2;
-for (num1 = 0; num1 <= 9; num1++)
+int n;
+for (n = 48; n <=57; n++)
 {
-for (num2 = 0; num2 <= 9; num2++)
+putchar(n);
+if (n != 57)
 {
-if (num1 < num2) {
-putchar(num1 + '0');
 putchar(',');
-putchar(num2 + '0');
 putchar(' ');
-}
 }
 }
 putchar('\n');
