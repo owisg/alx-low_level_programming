@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 /**
@@ -7,10 +6,14 @@
  */
 int main(void)
 {
-char buffer[50];
+char buffer[58];
 int i;
-strcpy(buffer, "and that piece of art is useful");
-for (i = 0; i < (int) strlen(buffer); i++)
+for (i = 0; i < 58; i++)
+{
+buffer[i] = '\0';
+}
+strncpy(buffer, "and that piece of art is useful - Dora Korpar, 2015-10-19", 58);
+for (i = 0; buffer[i] != '\0'; i++)
 {
 write(2, &buffer[i], 1);
 }
