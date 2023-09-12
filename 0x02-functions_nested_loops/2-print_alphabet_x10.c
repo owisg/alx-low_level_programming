@@ -1,6 +1,7 @@
 #include "main.h"
 /**
-* print_alphabet for ten times- print all alpphabet in lowercase
+* print_alphabet_x10 - prints 10 times the  alpphabet, in lowercase
+* followed by a new line 
 */
 void print_alphabet_x10(void)
 {
