@@ -11,7 +11,7 @@ for (i = 1; i <= n; i++)
 {
 for (j = 1; j <= n - i + 1; j++)
 {
-if (j <= i - 1)
+if (j == i - 1 || j == n - i + 1)
 {
 _putchar('$');
 }
