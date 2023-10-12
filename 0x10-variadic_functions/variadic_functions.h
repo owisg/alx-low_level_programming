@@ -20,6 +20,6 @@ typedef struct opp
 {
 	char *c;
 	int (*f)(va_list a);
-}printer;
+} printer;
 
 #endif
