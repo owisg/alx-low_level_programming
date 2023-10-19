@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lists.h"
+/**
+*add_node_end - append node to list pointed
+*@head: pointer to pointer
+*@str: string to initialize new node
+*Return: new or NULL
+*/
 list_t *add_node_end(list_t **head, const char *str)
 {
 int index = 0;
