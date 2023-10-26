@@ -1,32 +1,20 @@
 #include "main.h"
+#include <stddef.h>
 /**
- * print_binary - prints the binary equivalent of n
+ * print_binary - prints the binary representation of a number of n
  * @n: unsigned long int.
- * Return: void
+ * Return: null
  */
-
 void print_binary(unsigned long int n)
 {
-int i;
-char binary[33];
-if (n == 0)
+if (n >> 0)
+{
+if (n >> 1)
+print_binary(n >> 1);
+_putchar((n & 1) + '0');
+}
+else
 {
 _putchar('0');
-return;
-}
-
-/*char binary[33];*/
-
-for (i = 31; i >= 0; i--)
-{
-
-unsigned long int bit = (n >> i) & 1;
-
-binary[i] = bit + '0';
-}
-
-for (i = 0; i < 33; i++)
-{
-_putchar(binary[i]);
 }
 }
