@@ -11,8 +11,8 @@
 ssize_t read_textfile(const char *filename, size_t letters)
 {
 FILE *file = fopen(filename, "r");
-ssize_t bytes_read = 0;
-char c;
+char *buffer = malloc(letters);
+ssize_t bytes_read = fread(buffer, 1, letters, file);
 if (filename == NULL)
 {
 return (0);
@@ -22,15 +22,19 @@ if (file == NULL)
 {
 return (0);
 }
-while ((c = fgetc(file)) != EOF)
+
+if (buffer == NULL)
 {
-if ((ssize_t)letters <= bytes_read)
+return (0);
+}
+
+if (bytes_read == 0)
 {
-break;
+free(buffer);
+return (0);
 }
-_putchar(c);
-bytes_read++;
-}
+fwrite(buffer, 1, bytes_read, stdout);
+free(buffer);
 fclose(file);
 return (bytes_read);
 }
