@@ -1,77 +1,75 @@
 #include "main.h"
-#define BUFFER_SIZE 1024
 /**
- * copy_file - copies the content of a file to another file
- *
- * @filename_from: the name of the source file
- * @filename_to: the name of the destination file
- *
- * Copies the content of the file `filename_from` to the file `filename_to`. If
- * the destination file does not exist, it is created. If the source file
- * cannot be read, an error is returned.
- *
- * Return : 0 on success, or a non-zero value on failure.
- */
+*error_wr - detect error in write or read
+*@fdr: result of open file to read
+*@fdw: result of open file to write
+*@file_from: file from copy
+*@file_to: file to copy
+*/
+void error_wr(int fdr, int fdw, char *file_from, char *file_to)
+{
+	ssize_t r, w;
+	char buf[NBYTES];
 
-int copy_file(const char *filename_from, const char *filename_to)
-{
-int fd_to;
-int fd_from;
-char buffer[BUFFER_SIZE];
-ssize_t bytes_read;
-ssize_t bytes_written;
-if (filename_from == NULL || filename_to == NULL)
-{
-dprintf(STDERR_FILENO, "Usage: cp %s %s\n", filename_from, filename_to);
-return (97);
+	do {
+		r = read(fdr, buf, NBYTES);
+		if (r == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+			exit(98);
+		}
+		if (r)
+		{
+			w = write(fdw, buf, r);
+			if (w != r)
+			{
+				dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
+				exit(99);
+			}
+		}
+	} while (r);
 }
-fd_to = open(filename_to, O_WRONLY | O_TRUNC | O_CREAT, 0666);
-if (fd_to < 0)
-{
-dprintf(STDERR_FILENO, "Error: Can't create file %s\n", filename_to);
-return (99);
-}
-
-fd_from = open(filename_from, O_RDONLY);
-if (fd_from < 0)
-{
-dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", filename_from);
-return (98);
-}
-while (1)
-{
-bytes_read = read(fd_from, buffer, BUFFER_SIZE);
-if (bytes_read == 0)
-{
-break;
-}
-bytes_written = write(fd_to, buffer, bytes_read);
-if (bytes_written < 0)
-{
-dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", filename_to);
-return (99);
-}
-}
-close(fd_from);
-close(fd_to);
-return (0);
-}
-
 /**
  * main - copy content of one file into another
- * copy_file - copy content of one file into another
+ * @argc: count of arguments
+ * @argv: array of arguments
+ *
  * Return: EXIT_SUCCESS on success or exit with error number.
  */
-int main(void)
+int main(int argc, char *argv[])
 {
-int success = copy_file("my_file.txt", "new_file.txt");
-if (success == 0)
-{
-printf("File copied successfully.\n");
-}
-else
-{
-printf("Error copying file.\n");
-}
-return (0);
+	char *file_from, *file_to;
+	int fdr, fdw;
+
+	if (argc != 3)
+	{
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
+	}
+	file_from = argv[1];
+	file_to = argv[2];
+	fdr = open(file_from, O_RDONLY);
+	if (fdr == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+		exit(98);
+	}
+	fdw = open(file_to, O_CREAT | O_TRUNC | O_WRONLY, 0664);
+	error_wr(fdr, fdw, file_from, file_to);
+	if (fdw == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file_to);
+		exit(99);
+	}
+	if (close(fdw))
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fdw);
+		exit(100);
+	}
+	if (close(fdr))
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fdr);
+		exit(100);
+	}
+	exit(EXIT_SUCCESS);
 }
